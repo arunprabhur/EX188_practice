@@ -17,7 +17,7 @@ RUN ls -lrt /opt/Java_OpenJDK22/bin/java && ls -lrt /opt
 #Stage 2 for Container Image
 FROM registry.access.redhat.com/ubi8
 
-MAINTAINER Arun prabhu.arun10@gmail.com
+LABEL Arun prabhu.arun10@gmail.com
 LABEL project="Arun'sProject"
 
 ARG VERSION \

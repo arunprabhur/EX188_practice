@@ -2,7 +2,7 @@
 
 FROM registry.access.redhat.com/ubi8:latest
 
-MAINTAINER Arun prabhu.arun10@gmail.com
+LABEL Arun prabhu.arun10@gmail.com
 LABEL project="Arun'sProject"
 
 ARG VERSION \
