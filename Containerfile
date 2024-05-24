@@ -1,0 +1,34 @@
+#My First ContainerFile
+
+FROM registry.access.redhat.com/ubi8
+
+MAINTAINER Arun prabhu.arun10@gmail.com
+LABEL project="Arun'sProject"
+
+ARG VERSION \
+    DEVELOPER
+
+ENV PROJECT="DEMO PROJECT" \
+    ENV_VERSION=${VERSION:-0.1} \
+    ENV_DEVELOPER=${DEVELOPER:-Demo}
+
+RUN useradd -u 1000 arun && useradd -M -s /sbin/nologin prabhu
+WORKDIR --chown=arun:arun --chmod=755 /custom/lab/exercise
+
+#Move the script to container user folder
+ADD tomcat.tar.gz Java_OpenJDK22.tar.gz .
+
+RUN chown -R arun:arun . && chmod -R 774 .
+#ADD Java_OpenJDK22.tar.gz /opt/
+
+ENV JAVA_HOME=/custom/lab/exercise/Java_OpenJDK22
+USER arun
+EXPOSE 8080
+
+RUN echo "USER NAME: " && whoami
+
+#VOLUME /custom/lab/exercise/apache-tomcat-10.1.24/logs
+
+#Execute my script while starting container
+ENTRYPOINT ["/custom/lab/exercise/apache-tomcat-10.1.24/bin/catalina.sh","run"]
+
