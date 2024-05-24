@@ -1,6 +1,6 @@
 #Stage for doing Java build
 
-FROM registry.access.redhat.com/ubi8 as javabuilder
+FROM registry.access.redhat.com/ubi8
 
 WORKDIR /opt
 
@@ -14,7 +14,8 @@ RUN /opt/Java_OpenJDK22/bin/javac /opt/Simple.java
 
 RUN ls -lrt /opt/Java_OpenJDK22/bin/java && ls -lrt /opt
 
-#Stage 2 for Container Image
+
+#My First ContainerFile
 FROM registry.access.redhat.com/ubi8
 
 MAINTAINER Arun prabhu.arun10@gmail.com
@@ -27,14 +28,25 @@ ENV PROJECT="DEMO PROJECT" \
     ENV_VERSION=${VERSION:-0.1} \
     ENV_DEVELOPER=${DEVELOPER:-Demo}
 
-WORKDIR /opt
+#RUN useradd -u 1000 arun && useradd -M -s /sbin/nologin prabhu
+WORKDIR /custom/lab/exercise
 
+#Move the script to container user folder
 ADD Java_OpenJDK22.tar.gz .
 
-ENV JAVA_HOME=/opt/Java_OpenJDK22
-COPY --from=javabuilder /opt/Simple.class /opt/
+#RUN chown -R arun:arun . && chmod -R 774 .
+#ADD Java_OpenJDK22.tar.gz /opt/
+
+ENV JAVA_HOME=/custom/lab/exercise/Java_OpenJDK22
+#USER arun
+#EXPOSE 8080
+
+#RUN echo "USER NAME: " && whoami
+
+#VOLUME /custom/lab/exercise/apache-tomcat-10.1.24/logs
 
 #Execute my script while starting container
-ENTRYPOINT ["/opt/Java_OpenJDK22/bin/java"]
+ENTRYPOINT ["/custom/lab/exercise/Java_OpenJDK22/bin/java"]
 
 CMD ["-version"]
+
