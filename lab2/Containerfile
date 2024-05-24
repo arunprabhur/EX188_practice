@@ -1,0 +1,30 @@
+#My First ContainerFile
+
+FROM registry.access.redhat.com/ubi8:latest
+
+MAINTAINER Arun prabhu.arun10@gmail.com
+LABEL project="Arun'sProject"
+
+ARG VERSION \
+    DEVELOPER
+
+ENV PROJECT="DEMO PROJECT" \
+    ENV_VERSION=${VERSION:-0.1} \
+    ENV_DEVELOPER=${DEVELOPER:-Demo}
+
+WORKDIR /opt
+
+#Create Project Folder
+RUN mkdir project && echo $VERSION $DEVELOPER
+
+#Move the script to container user folder
+ADD test.sh project/
+#RUN echo $VERSION
+
+COPY test.tar.gz project/
+RUN yum -y update
+#Execute my script while starting container
+ENTRYPOINT ["/opt/project/test.sh"]
+
+CMD ["Sample","Text"]
+ 

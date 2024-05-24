@@ -1,0 +1,39 @@
+#My First ContainerFile
+
+FROM registry.access.redhat.com/ubi8:latest
+
+MAINTAINER Arun prabhu.arun10@gmail.com
+LABEL project="Arun'sProject"
+
+ARG VERSION \
+    DEVELOPER
+
+ENV PROJECT="DEMO PROJECT" \
+    ENV_VERSION=${VERSION:-0.1} \
+    ENV_DEVELOPER=${DEVELOPER:-Demo}
+
+RUN useradd -u 1000 arun && useradd -M -s /sbin/nologin prabhu
+WORKDIR --chown=arun:arun --chmod=755 /custom/lab/exercise
+
+
+#Move the script to container user folder
+ADD --chown=arun:arun --chmod=755 test.sh /custom/lab/exercise/
+#RUN echo $VERSION
+
+COPY --chown=arun:arun --chmod=700 test.tar.gz /custom/lab/exercise
+
+RUN yum -y update && \
+    dnf install -y python38 && \
+    python3 -V
+
+RUN echo "WORKDIR Path: " && pwd
+
+USER arun
+
+RUN echo "USER NAME: " && whoami
+
+#Execute my script while starting container
+ENTRYPOINT ["/custom/lab/exercise/test.sh"]
+
+CMD ["Sample","Text"]
+ 
